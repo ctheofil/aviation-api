@@ -1,0 +1,109 @@
+openapi: 3.1.0
+info:
+  title: Aviation API
+  description: Microservice that fetches airport details by ICAO code from public aviation data APIs.
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+
+paths:
+  /api/airports/{icaoCode}:
+    get:
+      summary: Get airport by ICAO code
+      operationId: getAirport
+      parameters:
+        - name: icaoCode
+          in: path
+          required: true
+          description: 4-letter ICAO airport identifier (e.g. KJFK, EGLL)
+          schema:
+            type: string
+          examples:
+            jfk:
+              value: KJFK
+        - name: X-API-Key
+          in: header
+          required: false
+          description: API key (only required when authentication is enabled)
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Airport found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AirportInfo"
+              examples:
+                jfk:
+                  value:
+                    icaoCode: KJFK
+                    iataCode: JFK
+                    name: NEW YORK/JOHN F KENNEDY INTL
+                    country: US
+                    state: NY
+                    latitude: 40.6399
+                    longitude: -73.7787
+                    elevationFt: 4
+                    source: AviationWeather.gov
+        "401":
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "404":
+          description: Airport not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+        "503":
+          description: All upstream providers unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+
+components:
+  schemas:
+    AirportInfo:
+      type: object
+      properties:
+        icaoCode:
+          type: string
+        iataCode:
+          type: string
+        name:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        elevationFt:
+          type: integer
+        source:
+          type: string
+
+    ProblemDetail:
+      type: object
+      description: RFC 9457 Problem Detail
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string

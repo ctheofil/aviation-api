@@ -1,0 +1,108 @@
+{
+  "info": {
+    "name": "Aviation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "apiKey",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Airports",
+      "item": [
+        {
+          "name": "Get Airport by ICAO Code",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}",
+                "description": "Optional - only needed if aviation.api-key is configured",
+                "disabled": true
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/airports/KJFK",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "airports", "KJFK"]
+            }
+          }
+        },
+        {
+          "name": "Get Airport - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/airports/XXXX",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "airports", "XXXX"]
+            }
+          }
+        },
+        {
+          "name": "Get Airport - Circuit Breaker (503)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "To trigger a 503, the circuit breaker must be open. Steps:\n1. Stop the upstream (e.g. block aviationweather.gov or misconfigure the base URL).\n2. Send this request repeatedly (10+ times) until the failure rate exceeds 50%.\n3. Once the circuit opens, subsequent requests will return 503.\n\nThe circuit stays open for 30 seconds before half-opening.",
+            "url": {
+              "raw": "{{baseUrl}}/api/airports/EGLL",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "airports", "EGLL"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actuator",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health"]
+            }
+          }
+        },
+        {
+          "name": "Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/metrics",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "metrics"]
+            }
+          }
+        },
+        {
+          "name": "Caches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/caches",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "caches"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

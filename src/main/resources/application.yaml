@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: aviation-api
+
+# API key authentication (leave blank to disable)
+aviation:
+  api-key: ""
+
+# Resilience4j
+resilience4j:
+  retry:
+    instances:
+      airportLookup:
+        max-attempts: 3
+        wait-duration: 500ms
+  circuitbreaker:
+    instances:
+      airportLookup:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+
+# Actuator — expose health, info, metrics, and caches
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,caches
+  endpoint:
+    health:
+      show-details: always
