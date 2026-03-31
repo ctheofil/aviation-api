@@ -46,6 +46,9 @@ public class AirportService {
         if (t instanceof AirportNotFoundException e) {
             throw e;
         }
+        if (t instanceof UpstreamServiceException e) {
+            throw e;
+        }
         log.error("All providers failed for ICAO code {}: {}", icaoCode, t.getMessage());
         throw new UpstreamServiceException("All upstream providers are unavailable");
     }
