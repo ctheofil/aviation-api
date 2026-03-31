@@ -131,6 +131,8 @@ controller → service → provider(s)
 - **Controller** — thin REST layer, delegates to the service. No business logic.
 - **Service** — orchestrates the provider chain. Owns caching, retry, and circuit breaker concerns.
 - **Provider** — each provider implements the `AirportDataProvider` interface. Providers are `@Order`-ed and tried sequentially, making the system decoupled from any single upstream source.
+  - `AviationWeatherProvider` (`@Order(1)`) — primary, queries [aviationweather.gov](https://aviationweather.gov/data/api/).
+  - `AirportsApiProvider` (`@Order(2)`) — fallback, queries [airportsapi.com](https://airportsapi.com).
 
 ### Design Patterns
 

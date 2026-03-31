@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Aviation API
-  description: Microservice that fetches airport details by ICAO code from public aviation data APIs.
+  description: Microservice that fetches airport details by ICAO code from public aviation data APIs. Uses AviationWeather.gov as the primary source and AirportsAPI.com as a fallback.
   version: 0.0.1
 
 servers:
@@ -92,6 +92,7 @@ components:
           type: integer
         source:
           type: string
+          description: Which upstream provider returned the data (AviationWeather.gov or AirportsAPI)
 
     ProblemDetail:
       type: object
