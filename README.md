@@ -197,3 +197,8 @@ This image can be deployed to any container orchestrator (Kubernetes, ECS) or a 
 - **Metrics:** `GET /actuator/metrics` exposes JVM, HTTP, cache, and Resilience4j metrics. These can be scraped by Prometheus via the `micrometer-registry-prometheus` dependency.
 - **Logging:** Structured SLF4J logging throughout. In production, configure JSON log format and ship to a centralised system (ELK, CloudWatch, Datadog).
 - **Alerting:** Key metrics to alert on include circuit breaker state changes, high retry rates, and cache eviction spikes.
+
+### AI Usage
+**Tools**: Kiro-CLI
+
+**Cases**: Documentation, Increasing test coverage
