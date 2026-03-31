@@ -84,7 +84,7 @@ class AirportIntegrationTest {
     }
 
     @Test
-    void shouldReturn404WhenAllUpstreamsError(WireMockRuntimeInfo wm) throws Exception {
+    void shouldReturn503WhenAllUpstreamsError(WireMockRuntimeInfo wm) throws Exception {
         stubFor(com.github.tomakehurst.wiremock.client.WireMock.get(urlPathEqualTo("/airport"))
                 .willReturn(serverError()));
 
@@ -92,6 +92,6 @@ class AirportIntegrationTest {
                 .willReturn(serverError()));
 
         mockMvc.perform(get("/api/airports/ZZZZ"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isServiceUnavailable());
     }
 }

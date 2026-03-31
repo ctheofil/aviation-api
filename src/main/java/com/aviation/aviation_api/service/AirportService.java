@@ -51,6 +51,7 @@ public class AirportService {
     }
 
     private AirportInfo tryProviders(String icaoCode) {
+        boolean allFailed = true;
         for (AirportDataProvider provider : providers) {
             try {
                 var result = provider.fetchAirport(icaoCode.toUpperCase());
@@ -58,9 +59,13 @@ public class AirportService {
                     log.info("Airport {} resolved via {}", icaoCode, provider.name());
                     return result.get();
                 }
+                allFailed = false; // provider responded successfully but had no data
             } catch (Exception e) {
                 log.warn("Provider {} failed for {}: {}", provider.name(), icaoCode, e.getMessage());
             }
+        }
+        if (allFailed) {
+            throw new UpstreamServiceException("All upstream providers are unavailable");
         }
         throw new AirportNotFoundException(icaoCode);
     }

@@ -6,6 +6,13 @@ spring:
 aviation:
   api-key: ""
 
+# Providers URLs
+aviation-weather:
+  base-url: https://aviationweather.gov/api/data
+
+airports-api:
+  base-url: https://airportsapi.com/api
+
 # Resilience4j
 resilience4j:
   retry:

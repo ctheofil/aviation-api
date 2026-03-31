@@ -64,6 +64,18 @@ class AirportServiceTest {
     }
 
     @Test
+    void shouldThrowUpstreamExceptionWhenAllProvidersThrow() {
+        var primary = mock(AirportDataProvider.class);
+        when(primary.name()).thenReturn("Primary");
+        when(primary.fetchAirport(any())).thenThrow(new RuntimeException("timeout"));
+
+        var service = new AirportService(List.of(primary));
+
+        assertThatThrownBy(() -> service.getAirport("KJFK"))
+                .isInstanceOf(com.aviation.aviation_api.exception.UpstreamServiceException.class);
+    }
+
+    @Test
     void shouldUppercaseIcaoCode() {
         var provider = mockProvider("Primary", Optional.of(SAMPLE));
         var service = new AirportService(List.of(provider));
